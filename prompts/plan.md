@@ -8,8 +8,10 @@ Explore enough of the repository to be concrete, then output a plan with exactly
 1. Goal - the outcome in one or two sentences.
 2. Current behaviour - what the relevant code does today, with file paths and line references.
 3. Proposed design - the approach at the level of modules, interfaces, data and schema, and
-   contracts, not file-by-file code. Name the key decision and the alternative you rejected, with
-   the reason.
+   contracts, not file-by-file code. For each relevant boundary, identify producer and consumer,
+   data shape and types, required and optional values, defaults, error behaviour, and compatibility
+   expectations. For cross-language changes, spell out representation or semantic differences.
+   Name the key decision and the alternative you rejected, with the reason.
 4. Diagram - one Mermaid diagram, only when the change touches three or more components or actors,
    or the control flow is non-obvious. Pick the type that fits: sequence for interaction between
    parts, flowchart for branching logic, class or ER for data, state for a state machine. Keep
@@ -21,7 +23,10 @@ Explore enough of the repository to be concrete, then output a plan with exactly
    observable behaviour).
 7. Out of scope - what this plan deliberately does not cover.
 8. Risks and unknowns - what could break, and what you could not determine from the code.
-9. Questions - anything you need me to decide before starting.
+9. Questions - anything you need me to decide before starting. Do not silently assume unresolved
+   contract details; identify which decisions block implementation.
 
-Keep it under a page. Name real paths, real symbols, and real commands. If the change is small enough
-that a plan adds nothing, say so in one line and propose the single next action instead.
+Keep simple plans brief; for cross-component or cross-language changes, use the space needed to
+specify contracts and decisions without repetition. Do not omit important details to meet a length
+limit. Name real paths, real symbols, and real commands. If the change is small enough that a plan
+adds nothing, say so in one line and propose the single next action instead.
