@@ -13,7 +13,9 @@ Explore enough of the repository to be concrete, then output a plan with exactly
 4. Diagram - one Mermaid diagram, only when the change touches three or more components or actors,
    or the control flow is non-obvious. Pick the type that fits: sequence for interaction between
    parts, flowchart for branching logic, class or ER for data, state for a state machine. Keep
-   labels short; put anything longer in prose below the diagram. Omit this section otherwise.
+   labels short; put anything longer in prose below the diagram. Avoid semicolons in labels (they
+   break the parser), and keep the diagram no wider than the terminal, or pi shows plain text
+   instead. Omit this section otherwise.
 5. Files to change - each path, and one line on why.
 6. Steps - ordered, each with the check that proves it worked (a test name, a command, or an
    observable behaviour).
