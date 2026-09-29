@@ -1,32 +1,32 @@
 # Design notes
 
-Why this configuration looks the way it does, what each decision cost, and what was deliberately
-left out. Every number here was measured with the tooling in `tools/` — see
-[Measuring your own setup](#measuring-your-own-setup).
+Why this first setup includes some capabilities and leaves out tools you may rarely use. It is also
+suited to context-constrained use, including local models. The costs below describe context usage,
+not measured agent performance; see [Measuring your own setup](#measuring-your-own-setup).
 
 ## The problem
 
 pi is a deliberately small agent: four built-in tools (`read`, `bash`, `edit`, `write`), no plan mode,
-no todo list, no subagents, no permission popups, no sandbox. The pitch is that a frontier model does
-not need thousands of tokens of scaffolding explaining what a coding agent is.
+no todo list, no subagents, no permission popups, no sandbox. A first setup can cover common needs
+without installing every optional tool. This one uses files and opt-in skills for planning, tracking,
+search, and delegation; install more tools when you actually need their features.
 
-Measured floor on pi 0.85.1: **1316 tokens of prefill** — the system prompt (678) plus the schemas of
-the four active tools (638). That is what you pay before you have typed anything, on every request.
+For context-constrained users, including those running local models, the active prompt footprint
+may matter. Measured floor on pi 0.85.1: **1316 tokens of prefill** — the system prompt (678) plus
+the schemas of the four active tools (638). A measured subagent extension adds **+5918 tokens** of
+tool schema while active, whether or not you delegate on a given turn. Those figures help compare
+context costs; they do not show that a smaller prompt makes the agent faster or more capable.
 
-The trouble is that everything you add is _also_ paid on every request. A single popular subagent
-extension adds **+5918 tokens** of tool schema — four and a half times pi's entire floor — and gets
-re-sent whether or not you delegate anything that day. Packages are usually evaluated on "does this
-help?" and almost never on "what does it cost per turn, forever?".
-
-So the design goal was: **get the behavioural rails, without paying for tool schemas that sit idle.**
+The design goal is: **provide a useful starting workflow without always-on tools you rarely use.**
 
 ## Principles
 
-1. **Add behaviours instead of context bloat**. Add developer behaviours instead of context bloat through avoidable extensions.
+1. **Start with common workflows.** Include useful defaults; leave specialized tools optional rather
+   than assuming everyone needs them.
 2. **Keep Pi small and maintainable.** Pi suggests to develop own extensions which require maintenance. This setup aims to make maintenance rare by avoiding custom extensions.
 3. **Prefer files when they suffice.** `AGENTS.md` costs instruction tokens; `TODO.md` and
-   `.pi/tasks/` are read when needed. Prompt templates and user-invoked skills avoid tool-schema
-   cost until used.
+   `.pi/tasks/` are read when needed. Prompt templates and user-invoked skills avoid always-active
+   tool schemas, which is especially useful with tighter context budgets.
 4. **Load capabilities on demand.** Skill descriptions can appear in the prompt, while skill
    bodies load only when used; `disable-model-invocation: true` removes even that description.
 5. **Separate advice from enforcement.** `AGENTS.md` guides the model but cannot constrain
@@ -138,7 +138,8 @@ the broader Herdsman protocol deliberately rather than reimplementing it in mark
 
 ## Why certain things were not added
 
-Each of these is one command away. The point is that you should add them knowing the price.
+Each of these can be added when its features fit your workflow. Context cost is one trade-off,
+not a proxy for agent performance.
 
 ### Plan-mode extensions (`@plannotator/pi-extension`, `@narumitw/pi-plan-mode`, …)
 

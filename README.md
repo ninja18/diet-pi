@@ -1,13 +1,16 @@
 # diet-pi
 
-A minimal, **measured** configuration for [pi](https://pi.dev) on macOS. Plans, task tracking,
-search, and delegation use files or opt-in skills instead of always-on extension tools. Global
-instructions still cost prompt tokens; the aim is to pay for what you actually use.
+A first setup for [pi](https://pi.dev) on macOS with planning, task tracking, search, and
+delegation, without installing tools you may rarely use. It is also a useful starting point when
+context is constrained, such as with local models: files and opt-in skills provide capabilities
+without making every tool active on every turn. Add extensions when your workflow calls for them.
 
 ## Measured context cost
 
-Prefill is the system prompt plus active tool schemas. Measured offline with `tools/ctx-audit.ts` on
-Pi 0.86.1 in an isolated scratch directory; tokens use Pi's `ceil(chars / 4)` estimator.
+Prefill is the system prompt plus active tool schemas. These figures describe context usage, not
+measured agent performance or a promised improvement from saving tokens. Measured offline with
+`tools/ctx-audit.ts` on Pi 0.86.1 in an isolated scratch directory; tokens use Pi's
+`ceil(chars / 4)` estimator.
 
 | Configuration                    | Prefill   | vs bare Pi                  |
 | -------------------------------- | --------- | --------------------------- |
@@ -17,9 +20,8 @@ Pi 0.86.1 in an isolated scratch directory; tokens use Pi's `ceil(chars / 4)` es
 | with common extensions installed | **16735** | +15419 (historical bare Pi) |
 
 The last row is the ["install everything" stack](DESIGN.md#prefill-comparison): 26 active tools,
-measured on Linux with Pi 0.85.1 against a **1316**-token bare baseline. It is not this setup plus
-one extension, and its delta is not comparable to the current rows. This was measured in a old pi and extensions version, your measurements may differ.
-Paths can shift totals slightly; task files load only when read, while global instructions are included above.
+measured on Linux with Pi 0.85.1 against a **1316**-token bare baseline. Your measurements may differ. Paths can shift totals slightly; task files
+load only when read, while global instructions are included above.
 
 ## What you get
 
@@ -125,7 +127,7 @@ path, then removes the dummy key. Review the script before running it on a machi
 install.sh                 idempotent installer: settings.json, AGENTS.md, /plan and the skills
 config/settings.json       merged into ~/.pi/agent/settings.json
 config/AGENTS.md           ~/.pi/agent/AGENTS.md   - full working agreement
-config/AGENTS.lean.md      same rules, less prose  - swap in if you want the tokens back
+config/AGENTS.lean.md      same rules, less prose  - an option for tighter context budgets
 prompts/plan.md            ~/.pi/agent/prompts/plan.md - /plan template
 skills/brave-search/       ~/.pi/agent/skills/brave-search/ - SKILL.md + brave.mjs
 skills/herdr-subagents/     ~/.pi/agent/skills/herdr-subagents/ - two-mode Herdr orchestration
